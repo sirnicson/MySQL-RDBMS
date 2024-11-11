@@ -63,10 +63,12 @@ mysql -u root -p
 ```
 
 - Create a new database to restore the backup into, or use an existing database
-```bash                                                                                             CREATE DATABASE college_database;
+```bash
+CREATE DATABASE college_database;
 ```
 - Exit MySQL and use the following command to restore:
-```bash                                                                                             mysql -u root -p college_database < college_database_backup.sql
+```bash
+mysql -u root -p college_database < college_database_backup.sql
 ```
 After restoring, the database will be ready with the data from the backup file.
 
