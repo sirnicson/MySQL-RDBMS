@@ -56,18 +56,19 @@ The database consists of the following tables:
    - `graded_by` (INTEGER, Foreign Key references `Teachers.ID`)
    - Primary Key: (`reg_id`, `graded_by`)
 
-## Getting Started
+## Using the Backup file
+- Open the terminal and log in to MySQL
+```bash
+mysql -u root -p
+```
 
-### Prerequisites
+- Create a new database to restore the backup into, or use an existing database
+```bash                                                                                             CREATE DATABASE college_database;
+```
+- Exit MySQL and use the following command to restore:
+```bash                                                                                             mysql -u root -p college_database < college_database_backup.sql
+```
+After restoring, the database will be ready with the data from the backup file.
 
-- MySQL installed on your local machine
-- Access to a Linux terminal
-- Basic knowledge of SQL
 
-### Installation
-
-1. Clone the repository
-2. cd into repository
-3. run MySQL in your terminal or run script in MySQL Workbench
-4. Run the setup.sql to create tables
-5. Populate tables with data
+This README now includes backup and restoration instructions, ensuring that your database can be efficiently saved and restored as needed.
