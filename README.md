@@ -15,6 +15,7 @@ This project involves creating a MySQL database for managing a college's adminis
 
 The database consists of the following tables:
 
+```plaintext
 Admins (
         ID INT PRIMARY KEY,
         first_name VARCHAR(20) NOT NULL,
@@ -84,6 +85,7 @@ Grading (
         FOREIGN KEY (course_id) REFERENCES Courses(ID),
         FOREIGN KEY (teacher_id) REFERENCES Teachers(ID)
 );
+```
 
 ## Using the Backup file
 - Open the terminal and log in to MySQL
