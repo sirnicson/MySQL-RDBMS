@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project involves creating a MySQL database for managing a college's administrative operations, including handling admins, teachers, students, courses, course enrollment, and grading. The database supports CRUD operations and allows for efficient management of courses and user roles.
+This project involves creating a MySQL database for managing a college's administrative operations, including handling admins, teachers, students, courses, course allocation, registration, and grading. The database was built using mysql command-line client 6.5.1 and supports CRUD operations, allowing for efficient management of courses and user roles.
 
 ## Features
 
@@ -15,46 +15,75 @@ This project involves creating a MySQL database for managing a college's adminis
 
 The database consists of the following tables:
 
-1. **Admins**
-   - `ID` (INTEGER, Primary Key)
-   - `name` (VARCHAR)
-   - `email` (VARCHAR)
+Admins (
+        ID INT PRIMARY KEY,
+        first_name VARCHAR(20) NOT NULL,
+        last_name VARCHAR(20) NOT NULL,
+        birth_date DATE,
+        gender ENUM('Male', 'Female') NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        address VARCHAR(255)
+);
 
-2. **Teachers**
-   - `ID` (INTEGER, Primary Key)
-   - `name` (VARCHAR)
-   - `email` (VARCHAR)
+Teachers (
+        ID INT PRIMARY KEY,
+        first_name VARCHAR(20) NOT NULL,
+        last_name VARCHAR(20) NOT NULL,
+        birth_date DATE,
+        gender ENUM('Male', 'Female') NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        address VARCHAR(255)
+);
 
-3. **Students**
-   - `ID` (INTEGER, Primary Key)
-   - `name` (VARCHAR)
-   - `email` (VARCHAR)
-   - `enrollment_year` (YEAR)
+Students (
+        ID INT PRIMARY KEY,
+        first_name VARCHAR(20) NOT NULL,
+        last_name VARCHAR(20) NOT NULL,
+        birth_date DATE,
+        gender ENUM('Male', 'Female') NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        address VARCHAR(255),
+        enrollment_year INT
+);
 
-4. **Courses**
-   - `ID` (INTEGER, Primary Key)
-   - `course_name` (VARCHAR)
-   - `semester` (VARCHAR)
-   - `is_offered` (BOOLEAN)
-   - `created_by` (INTEGER, Foreign Key references `Admins.ID`)
+Courses (
+        ID INT PRIMARY KEY,
+        course_name VARCHAR(255),
+        semester VARCHAR(10),
+        is_offered BOOLEAN,
+        admin_id INT,
+        FOREIGN KEY (admin_id) REFERENCES Admins(ID)
+);
 
-5. **Course_Allocation**
-   - `course_id` (INTEGER, Foreign Key references `Courses.ID`)
-   - `teacher_id` (INTEGER, Foreign Key references `Teachers.ID`)
-   - `assigned_by` (INTEGER, Foreign Key references `Admins.ID`)
-   - Primary Key: (`course_id`, `teacher_id`)
+Course_Allocation (
+        course_id INT,
+        teacher_id INT,
+        admin_id INT,
+        PRIMARY KEY (course_id, teacher_id),
+        FOREIGN KEY (course_id) REFERENCES Courses(ID),
+        FOREIGN KEY (teacher_id) REFERENCES Teachers(ID),
+        FOREIGN KEY (admin_id) REFERENCES Admins(ID)
+);
 
-6. **Course_Registration**
-   - `ID` (INTEGER, Primary Key)
-   - `student_id` (INTEGER, Foreign Key references `Students.ID`)
-   - `course_id` (INTEGER, Foreign Key references `Courses.ID`)
-   - `enrollment_date` (DATE)
+Course_Registration (
+        student_id INT,
+        course_id INT,
+        registration_date DATE,
+        PRIMARY KEY (student_id, course_id),
+        FOREIGN KEY (student_id) REFERENCES Students(ID),
+        FOREIGN KEY (course_id) REFERENCES Courses(ID)
+);
 
-7. **Grading**
-   - `reg_id` (INTEGER, Foreign Key references `Course_Registration.ID`)
-   - `grade` (ENUM('Pass', 'Fail'))
-   - `graded_by` (INTEGER, Foreign Key references `Teachers.ID`)
-   - Primary Key: (`reg_id`, `graded_by`)
+Grading (
+        student_id INT,
+        course_id INT,
+        grade ENUM('Pass', 'Fail'),
+        teacher_id INT,
+        PRIMARY KEY (student_id, course_id, teacher_id),
+        FOREIGN KEY (student_id) REFERENCES Students(ID),
+        FOREIGN KEY (course_id) REFERENCES Courses(ID),
+        FOREIGN KEY (teacher_id) REFERENCES Teachers(ID)
+);
 
 ## Using the Backup file
 - Open the terminal and log in to MySQL
@@ -72,5 +101,3 @@ mysql -u root -p college_database < college_database_backup.sql
 ```
 After restoring, the database will be ready with the data from the backup file.
 
-
-This README now includes backup and restoration instructions, ensuring that your database can be efficiently saved and restored as needed.
